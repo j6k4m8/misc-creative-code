@@ -11,6 +11,11 @@ Miscellaneous processing/p5/OFx/procedural-blender scripts — uploaded as I fin
 
 ## p5
 
+- [`colonies`](/colonies)
+
+  <img src="https://user-images.githubusercontent.com/693511/60309824-e82ee700-991d-11e9-87da-5757032f63a0.png" height=300 />
+  <img src="https://user-images.githubusercontent.com/693511/60309841-ebc26e00-991d-11e9-9700-72c66e6ec337.png" height=300 />
+
 - [`coloring-book-neuron`](/coloring-book-neuron)
 
   <img src="https://user-images.githubusercontent.com/693511/60309742-5fb04680-991d-11e9-8042-0ffe8f059ace.png" width=300 />
