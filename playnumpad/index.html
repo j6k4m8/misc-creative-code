@@ -1,0 +1,113 @@
+<html>
+    <head>
+    </head>
+    <body>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.8/p5.js"></script>
+        <script language="javascript" type="text/javascript" src="https://rawgit.com/processing/p5.js-sound/master/lib/p5.sound.js"></script>
+
+        <script>
+            var osc;
+            var playing = false;
+
+            function setup() {
+                backgroundColor = color(255,0,255);
+                textAlign(CENTER);
+            }
+
+            notes = [];
+
+            function play(freq, sus=0.6, type="sine") {
+                backgroundColor = color(freq/2,0,freq/2, 10);
+                let osc = new p5.Oscillator();
+                osc.setType(type);
+                osc.freq(freq);
+                osc.amp(0);
+                osc.start();
+                osc.amp(0.3, 0.005);
+                osc.amp(0, sus);
+            }
+
+            tones = {
+                pentatonic: {
+                    49: 1,
+                    50: 9/8,
+                    51: 5/4,
+                    52: 3/2,
+                    53: 5/3,
+                    54: 2,
+                    55: 2 * 9/8,
+                    56: 2 * 5/4,
+                    57: 2 * 3/2,
+                    58: 2 * 5/3,
+                },
+                jazz: {
+                    49: 1,
+                    50: 6/5,
+                    51: 4/3,
+                    52: 45/32,
+                    53: 3/2,
+                    54: 9/5,
+                    55: 2,
+                    56: 2 * 6/5,
+                    57: 2 * 4/3,
+                    58: 2 * 45/32,
+                    59: 2 * 3/2,
+                }
+            };
+
+		    asdf = [65, 83, 68, 70, 71, 72, 74, 75, 76];
+
+            song = {
+                phraseLength: 2 * 1000,
+                phrases: [[]]
+            }
+
+            state = {
+                recording: 0
+            };
+
+            function keyPressed(ev) {
+                mode = 'pentatonic';
+			    let sustain = ev.shiftKey ? 4 : undefined;
+				console.log(ev.keyCode)
+                if (Object.keys(tones[mode]).indexOf(ev.keyCode.toString()) >= 0) {
+				    let tone = 110 * ((1 + !ev.shiftKey) * 2);
+				    play(tone * tones[mode][ev.keyCode], sustain, "sawtooth");
+				} else {
+				    let frq = 220 * Object.values(
+						tones[mode]
+				    )[asdf.indexOf(ev.keyCode)];
+				    play(frq, sustain);
+				}
+
+                if (ev.ctrlKey && ev.keyCode !== 17) {
+                    song.phrases[0].push({
+                        tone: 220 * tones[mode][ev.keyCode],
+                        delay: (1 * (new Date() - startTime)) % song.phraseLength
+                    })
+                }
+            }
+
+            function draw() {
+                background(backgroundColor);
+            }
+
+            function playPhrases() {
+                console.log(`Phrase ${phraseCount++}`);
+                for (let p in song.phrases) {
+                    for (let note in song.phrases[p]) {
+                        setTimeout(() => {
+                            play(song.phrases[p][note].tone)
+                        }, song.phrases[p][note].delay)
+                    }
+                }
+                setTimeout(playPhrases, song.phraseLength);
+            }
+
+            let phraseCount = 0;
+            let startTime = new Date();
+            setInterval(() => console.log("."), 1000)
+            playPhrases();
+        </script>
+    </body>
+</html>
