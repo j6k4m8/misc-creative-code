@@ -91,10 +91,10 @@ function draw() {
   frame++;
   //background(255);
   for (let _node of nodes) {
-    if (node.alive) {
-      node.step();
+    if (_node.alive) {
+      _node.step();
       if (frame % 2 == 0) {
-        node.draw();
+        _node.draw();
       }
     }
   }
