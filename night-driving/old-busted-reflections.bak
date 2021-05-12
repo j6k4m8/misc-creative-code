@@ -1,0 +1,22 @@
+// Draw reflection of left headlight.
+        // This is a regular polygon where x coordinates are ennoised:
+        draw.polygon().points_colored((0..=360).step_by(1).map(|i| {
+            let r = deg_to_rad(i as f32);
+            let x = r.sin() * 5.0
+                + (right_headlight_x - CAR_WIDTH)
+                + (5.0
+                    * (model.car_position_noise.get([
+                        REFLECTION_NOISE_SIZE
+                            * ((right_headlight_x - CAR_WIDTH) as f64)
+                            * r.sin() as f64
+                            + r.sin() as f64,
+                        REFLECTION_NOISE_SIZE
+                            * 5.0
+                            * CAR_POSITION_NOISE_RATIO
+                            * (car.position.y as f64)
+                            + r.cos() as f64,
+                        0.0 as f64,
+                    ])) as f32);
+            let y = r.cos() * 45.0 + car.position.y - 50.0;
+            (pt2(x, y), rgba(1.0, 1.0, 1.0, 0.05))
+        }));
