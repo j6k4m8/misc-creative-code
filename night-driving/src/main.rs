@@ -10,11 +10,12 @@ const CAR_POSITION_NOISE_SIZE: f64 = 0.0005;
 const REFLECTION_NOISE_SIZE: f64 = 0.4;
 const CAR_POSITION_NOISE_RATIO: f64 = 10.0;
 const CAR_WIDTH: f32 = 12.0;
-const SPAWN_NEW_CAR_PROBABILITY: f32 = 0.994;
+const SPAWN_NEW_CAR_PROBABILITY: f32 = 0.99;
 const HEADLIGHT_HEIGHT: f32 = 15.0;
-const LANE_COUNT: f32 = 3.0;
-const LANE_WIDTH: f32 = 1.5;
-const CAR_VERTICAL_SPEED: f32 = 0.23;
+const LANE_COUNT: f32 = 5.5;
+const LANE_WIDTH: f32 = 1.6;
+const CAR_VERTICAL_SPEED: f32 = 0.7;
+// const CAR_VERTICAL_SPEED: f32 = 0.23;
 const REFLECTION_SIZE: usize = 40;
 
 fn model(_app: &App) -> Model {
@@ -59,6 +60,16 @@ fn update(app: &App, model: &mut Model, _update: Update) {
             .cars
             .push(Car::new(vec2(-32., app.window_rect().top())));
     }
+    if random::<f32>() > SPAWN_NEW_CAR_PROBABILITY {
+        model
+            .cars
+            .push(Car::new(vec2(600., app.window_rect().top())));
+    }
+    if random::<f32>() > SPAWN_NEW_CAR_PROBABILITY {
+        model
+            .cars
+            .push(Car::new(vec2(-600., app.window_rect().top())));
+    }
 
     // Move the cars:
     for car in model.cars.iter_mut() {
@@ -101,7 +112,7 @@ fn view(app: &App, model: &Model, frame: Frame) {
     }
     draw.rect()
         .wh(app.window_rect().wh())
-        .rgba(0.0, 0.0, 0.05, 0.2);
+        .rgba(0.0, 0.0, 0.05, 0.02);
 
     for car in model.cars.iter() {
         let right_headlight_x = car.position.x
@@ -123,7 +134,7 @@ fn view(app: &App, model: &Model, frame: Frame) {
             .points((0..REFLECTION_SIZE).map(|i| {
                 pt2(
                     right_headlight_x
-                        + (5.0
+                        + (15.0
                             * (model.car_position_noise.get([
                                 REFLECTION_NOISE_SIZE * right_headlight_x as f64,
                                 REFLECTION_NOISE_SIZE * (i as f32 + car.position.y) as f64,
@@ -137,7 +148,7 @@ fn view(app: &App, model: &Model, frame: Frame) {
                 car.color.red as f32,
                 car.color.green as f32,
                 car.color.blue as f32,
-                0.01,
+                0.005,
             );
 
         // Draw left headlight:
@@ -152,7 +163,7 @@ fn view(app: &App, model: &Model, frame: Frame) {
             .points((0..REFLECTION_SIZE).map(|i| {
                 pt2(
                     left_headlight_x
-                        + (5.0
+                        + (15.0
                             * (model.car_position_noise.get([
                                 REFLECTION_NOISE_SIZE * left_headlight_x as f64,
                                 REFLECTION_NOISE_SIZE * (i as f32 + car.position.y) as f64,
@@ -166,7 +177,7 @@ fn view(app: &App, model: &Model, frame: Frame) {
                 car.color.red as f32,
                 car.color.green as f32,
                 car.color.blue as f32,
-                0.01,
+                0.005,
             );
     }
 
