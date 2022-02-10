@@ -98,7 +98,7 @@ class ParticleSystem {
             for (let j = i + 1; j < this.particles.length; j++) {
                 let p2 = this.particles[j];
                 let d = dist(p1.x, p1.y, p2.x, p2.y);
-                if (d < 5 * (p1.radius + p2.radius)) {
+                if (d < 10 * (p1.radius + p2.radius)) {
                     // Collision!
                     // Remove p2, and avg p1 to p2's mass and position.
                     let p1Mass = p1.mass;
