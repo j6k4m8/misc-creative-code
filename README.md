@@ -1,6 +1,8 @@
 # misc creative code
 
-Miscellaneous processing/p5/OFx/procedural-blender scripts — uploaded as I find them in random places on my machines, sorted and documented as I feel like it, or never
+Miscellaneous processing/p5/OFx/nannou/blender scripts — uploaded as I find them in random places on my machines, sorted and documented as I feel like it, or never
+
+> **You do NOT have permission to use this repository, its byproducts, or any code herein to create NFTs. You ARE strongly encouraged to use anything in here to make cool art :)**
 
 ## processing
 
