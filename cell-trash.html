@@ -1,0 +1,121 @@
+<canvas id="life" width="900" height="900"></canvas>
+<script>
+    const WIDTH = window.innerWidth;
+    const HEIGHT = window.innerHeight;
+    //Hunar Ahmad @ brainxyz
+    m = document.getElementById("life").getContext("2d");
+    draw = (x, y, c, s) => {
+        m.fillStyle = c;
+        m.fillRect(x, y, s, s);
+    };
+    atoms = [];
+    atom = (x, y, c) => {
+        return { x: x, y: y, vx: 0, vy: 0, color: c };
+    };
+    random = () => {
+        return Math.random() * WIDTH + 50;
+    };
+    create = (number, color) => {
+        group = [];
+        for (let i = 0; i < number; i++) {
+            group.push(atom(random(), random(), color));
+            atoms.push(group[i]);
+        }
+        return group;
+    };
+    rule = (atoms1, atoms2, g) => {
+        for (let i = 0; i < atoms1.length; i++) {
+            fx = 0;
+            fy = 0;
+            for (let j = 0; j < atoms2.length; j++) {
+                a = atoms1[i];
+                b = atoms2[j];
+                dx = a.x - b.x;
+                dy = a.y - b.y;
+                d = Math.sqrt(dx * dx + dy * dy);
+                if (d > 0 && d < 80) {
+                    F = (g * 1) / d;
+                    fx += F * dx;
+                    fy += F * dy;
+                }
+            }
+            a.vx = (a.vx + fx) * 0.45;
+            a.vy = (a.vy + fy) * 0.45;
+            a.x += a.vx;
+            a.y += a.vy;
+            if (a.x < 0) a.x = WIDTH;
+            if (a.x > WIDTH) a.x = 0;
+            if (a.y < 0) a.y = HEIGHT;
+            if (a.y > HEIGHT) a.y = 0;
+            // if (a.x <= 0) {
+            //     a.vx *= -1;
+            // }
+            // if (a.y <= 0) {
+            //     a.vy *= -1;
+            // }
+        }
+    };
+
+    K = 800;
+    yellow = create(K, "yellow");
+    red = create(K, "red");
+    green = create(K, "green");
+    // purple = create(400, "purple");
+
+    update = () => {
+        rule(green, green, -0.32);
+        rule(green, red, -0.17);
+        rule(green, yellow, 0.34);
+        rule(red, red, -0.1);
+        rule(red, green, -0.34);
+        rule(yellow, yellow, -0.15);
+        rule(yellow, green, -0.8);
+        // rule(purple, yellow, -0.8);
+        // rule(yellow, purple, 0.8);
+        // rule(purple, purple, 0.1);
+
+        m.clearRect(0, 0, WIDTH, HEIGHT);
+        draw(0, 0, "black", WIDTH, HEIGHT);
+        for (i = 0; i < atoms.length; i++) {
+            draw(atoms[i].x, atoms[i].y, atoms[i].color, 3);
+        }
+
+        requestAnimationFrame(update);
+    };
+
+    var mouseX = 0,
+        mouseY = 0;
+    document.addEventListener(
+        "mousemove",
+        function (e) {
+            mouseX = e.pageX;
+            mouseY = e.pageY;
+        },
+        false
+    );
+
+    document.addEventListener("keypress", (e) => {
+        if (e.key == "y") {
+            let a = atom(mouseX, mouseY, "yellow");
+            yellow.push(a);
+            atoms.push(a);
+        }
+        if (e.key == "r") {
+            let a = atom(mouseX, mouseY, "red");
+            red.push(a);
+            atoms.push(a);
+        }
+        if (e.key == "g") {
+            let a = atom(mouseX, mouseY, "green");
+            green.push(a);
+            atoms.push(a);
+        }
+        if (e.key == "p") {
+            let a = atom(mouseX, mouseY, "purple");
+            purple.push(a);
+            atoms.push(a);
+        }
+    });
+
+    update();
+</script>

@@ -96,7 +96,7 @@ impl ChainLoop {
         let mut distances = vec![];
         for i in 0..self.particles.len() {
             for j in 0..self.particles.len() {
-                if i != j {
+                if i != j && rand::random_f32() < 0.5 {
                     let distance = self.particles[i]
                         .position
                         .distance(self.particles[j].position);
