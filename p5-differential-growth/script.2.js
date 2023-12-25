@@ -3,7 +3,7 @@ class DifferentialLoop {
     constructor(points, color = "#00babed9") {
         this.points = points;
         this.brownianMagnitude = 0.5;
-        this.springForceMagnitude = 0.5;
+        this.springForceMagnitude = 0.2;
         this.repelForceMagnitude = 0.4;
         this.color = color;
         this.debug = false;
@@ -30,7 +30,7 @@ class DifferentialLoop {
         //     ellipse(this.points[ind].x, this.points[ind].y, 10, 10);
         //     noFill();
         // }
-        this.points.splice(ind, 1);
+        this.points = this.points.slice(0, ind).concat(this.points.slice(ind + 1));
     }
 
     frame() {
@@ -76,10 +76,10 @@ class DifferentialLoop {
             // Remove points that are too close:
             let distToRight = p5.Vector.dist(this.points[i], rightNeighbor);
             let distToLeft = p5.Vector.dist(this.points[i], leftNeighbor);
-            if (distToRight < 6) {
+            if (distToRight < 8) {
                 toRemove.push((i + 1) % this.points.length);
             }
-            if (distToLeft < 6) {
+            if (distToLeft < 8) {
                 toRemove.push((i - 1 + this.points.length) % this.points.length);
             }
 
@@ -98,13 +98,14 @@ class DifferentialLoop {
 
     draw() {
         // Draw a smooth curve through all points:
-        strokeWeight(4);
+        strokeWeight(1);
         stroke(255, 100);
         // fill(100, 255, 255, 20)
         fill(this.color);
         beginShape();
         for (let i = 0; i < this.points.length; i++) {
             curveVertex(this.points[i].x, this.points[i].y);
+            ellipse(this.points[i].x, this.points[i].y, 3, 3);
         }
         curveVertex(this.points[0].x, this.points[0].y);
         curveVertex(this.points[1].x, this.points[1].y);
@@ -156,7 +157,7 @@ function setup() {
 }
 
 function draw() {
-    background(0, 30);
+    background(0, 10);
     translate(width / 2, height / 2);
     loop1.frame();
     loop1.draw();
